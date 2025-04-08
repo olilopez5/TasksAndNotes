@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tasksandnotes.databinding.ActivityMainBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+        // Crear el MaterialDatePicker
+        val materialDatePicker = MaterialDatePicker.Builder.datePicker()
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Fecha actual
+            .build()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -49,8 +55,10 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.viewCalendar.setOnClickListener {
-            // Voy al Activity de calendario
+            materialDatePicker.show(supportFragmentManager, "DATE_PICKER")
         }
+
+
 
         binding.addNewItem.setOnClickListener { view ->
             when (binding.tabs.selectedTabPosition) {
