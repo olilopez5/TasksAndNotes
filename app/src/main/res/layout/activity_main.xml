@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+
+    <!-- AppBarLayout con Toolbar y TabLayout -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- MaterialToolbar -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
+            app:title="Task and Notes"/>
+
+        <!-- TabLayout con TabItems -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_tasks_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tasks"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_notes_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notes"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- RecyclerView para las tareas y notas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/addRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:scrollbars="vertical" />
+
+    <!-- Floating Action Button para agregar elementos -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addNewItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/ic_add" />
+
+    <!-- RecyclerView para el calendario -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:scrollbars="vertical" />
+
+    <!-- Floating Action Button para ver calendario -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/viewCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/ic_calendar_tab" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
