@@ -7,6 +7,7 @@ import com.example.tasksandnotes.utils.DatabaseManager
 import com.example.tasksandnotes.utils.Security
 
 
+
 class NoteDAO(context: Context) {
 
     val databaseManager = DatabaseManager(context)
@@ -117,13 +118,15 @@ class NoteDAO(context: Context) {
 
 
             }// Si la nota es privada y tiene una contraseña, pedirla al usuario
-            if (note.isPasswordProtected()) {
-                // Aquí se pedirá la contraseña
-                val passwordCorrect = promptForPassword(context, note.password!!)
-                if (!passwordCorrect) {
-                    note = null  // Si la contraseña no es correcta, devolvemos null
-                }
+            if (note != null) {
+                if (note.isPasswordProtected()) {
+                    // Aquí se pedirá la contraseña
+                    val passwordCorrect = promptForPassword(context, note?.password!!)
+                    if (!passwordCorrect) {
+                        note = null  // Si la contraseña no es correcta, devolvemos null
+                    }
 
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

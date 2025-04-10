@@ -29,7 +29,9 @@
         android:layout_marginBottom="16dp"
         android:inputType="textCapSentences"/>
 
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
     <EditText
         android:id="@+id/noteDescriptionEditText"
         android:layout_width="match_parent"
@@ -39,6 +41,7 @@
         android:textSize="16sp"
         android:padding="12dp"
         android:inputType="textMultiLine"/>
+
 
     <!-- Opción para hacer la nota privada -->
     <LinearLayout
@@ -57,12 +60,14 @@
 
         <Switch
             android:id="@+id/privateNoteSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
     </LinearLayout>
 
     <!-- Campo para la contraseña (solo visible si el Switch está activado)
-    Invertigar con AlertDialog-->
+    Invertigar con AlertDialog
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayout"
         android:layout_width="match_parent"
@@ -77,6 +82,7 @@
             android:textSize="16sp"
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
+    -->
 
 
     <Button
