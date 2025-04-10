@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:hint="09/04/2025"
+        android:hint="10/04/2025"
         android:padding="12dp"
         android:layout_marginBottom="16dp"
         android:inputType="date"/>

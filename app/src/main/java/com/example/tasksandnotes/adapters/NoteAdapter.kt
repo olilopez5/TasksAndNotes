@@ -25,6 +25,9 @@ class NoteAdapter(var items: List<Note>,
         holder.itemView.setOnClickListener {
             onClick(position)
         }
+        holder.binding.editButton.setOnClickListener {
+            onClick(position)
+        }
         holder.binding.deleteButton.setOnClickListener {
             onDelete(position)
         }
