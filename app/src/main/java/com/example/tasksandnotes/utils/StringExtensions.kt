@@ -10,3 +10,9 @@ fun String.addStrikethrough() : SpannableString {
     spannable.setSpan(StrikethroughSpan(), 0, this.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     return spannable
 }
+
+//fun String.secure() : SpannableString {
+//    val spannable = SpannableString(this)
+//    // Sustituir las letras por asteriscos
+//    return spannable
+//}

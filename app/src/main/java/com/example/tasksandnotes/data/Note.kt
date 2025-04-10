@@ -19,7 +19,7 @@ data class Note(
         const val COLUMN_NAME_DESCRIPTION = "description"
         const val COLUMN_NAME_DATE = "date"
         const val COLUMN_NAME_PRIVATE = "private"
-        const val COLUMN_NAME_PASSWORD = "password"
+
 
     }
 

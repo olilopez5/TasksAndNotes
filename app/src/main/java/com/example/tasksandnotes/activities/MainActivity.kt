@@ -9,7 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tasksandnotes.adapters.NoteAdapter
 import com.example.tasksandnotes.adapters.TaskAdapter
+import com.example.tasksandnotes.data.Note
+import com.example.tasksandnotes.data.NoteDAO
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
@@ -21,11 +24,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     lateinit var taskDAO: TaskDAO
+    lateinit var noteDAO: NoteDAO
 
     lateinit var taskList : List<Task>
+    lateinit var noteList : List<Note>
 
     lateinit var taskAdapter: TaskAdapter
-    //lateinit var noteAdapter: NoteAdapter
+    lateinit var noteAdapter: NoteAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         taskDAO = TaskDAO(this)
+        noteDAO = NoteDAO(this)
 
         taskAdapter = TaskAdapter(
             emptyList(),
@@ -85,6 +91,28 @@ class MainActivity : AppCompatActivity() {
             },
         )
 
+        noteAdapter = NoteAdapter(emptyList(), { position ->
+            val note = noteList[position]
+
+            val intent = Intent(this, NoteActivity::class.java)
+            intent.putExtra(NoteActivity.NOTE_ID, note.id)
+            startActivity(intent)
+        }, { position ->
+            val note = noteList[position]
+
+            AlertDialog.Builder(this)
+                .setTitle("Delete note")
+                .setMessage("Are you sure you want to delete this note?")
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    noteDAO.delete(note)
+                    refreshData()
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .setCancelable(false)
+                .show()
+
+        },)
+
 
         binding.recyclerView.adapter = taskAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -104,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     1 -> {
                         // Cargo las notas
-                        //binding.recyclerView.adapter = noteAdapter
+                        binding.recyclerView.adapter = noteAdapter
                     }
                 }
                 //  supportActionBar?.title = tab.text
@@ -131,6 +159,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 1 -> {
                     // Creo una nota
+                    val intent = Intent(this, NoteActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
@@ -145,6 +175,9 @@ class MainActivity : AppCompatActivity() {
     private fun refreshData() {
         taskList = taskDAO.findAll()
         taskAdapter.updateItems(taskList)
+
+        noteList = noteDAO.findAll()
+        noteAdapter.updateItems(noteList)
 
         val toDoTasksNumber = taskDAO.countByNotDone()
         val tasksTab = binding.tabs.getTabAt(0)!!

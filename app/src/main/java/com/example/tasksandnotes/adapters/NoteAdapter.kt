@@ -3,7 +3,9 @@ package com.example.tasksandnotes.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.tasksandnotes.data.Note
+import com.example.tasksandnotes.databinding.ItemNoteBinding
 
 class NoteAdapter(var items: List<Note>,
                   val onClick: (Int) -> Unit,
@@ -37,10 +39,9 @@ class NoteAdapter(var items: List<Note>,
 class NoteViewHolder(val binding: ItemNoteBinding) : ViewHolder(binding.root) {
 
     fun render(note: Note) {
-        binding.doneCheckBox.isChecked = note.done
 
-        if (note.done) {
-            binding.titleTextView.text = note.title.addStrikethrough()
+        if (note.private) {
+            binding.titleTextView.text = note.title
         } else {
             binding.titleTextView.text = note.title
         }

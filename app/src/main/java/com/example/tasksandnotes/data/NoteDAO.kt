@@ -20,11 +20,11 @@ class NoteDAO(context: Context) {
             put(Note.COLUMN_NAME_TITLE,note.title)
             put(Note.COLUMN_NAME_DESCRIPTION,note.description)
             put(Note.COLUMN_NAME_DATE, note.date)
-            put(Note.COLUMN_NAME_PRIVATE, if (note.private) 1 else 0)
+            put(Note.COLUMN_NAME_PRIVATE, note.private)
 
-            if (note.private && !note.password.isNullOrEmpty()) {
-                put(Note.COLUMN_NAME_PASSWORD, Security.encryptPassword(note.password!!))
-            }
+//            if (note.private && !note.password.isNullOrEmpty()) {
+//                put(Note.COLUMN_NAME_PASSWORD, Security.encryptPassword(note.password!!))
+//            }
         }
         // new row, return PK od new row (insert ? error)
         try {
@@ -46,12 +46,12 @@ class NoteDAO(context: Context) {
         val values = ContentValues().apply {
             put(Note.COLUMN_NAME_TITLE,note.title)
             put(Note.COLUMN_NAME_DESCRIPTION,note.description)
-            put(Note.COLUMN_NAME_DATE,note.date)
+            put(Note.COLUMN_NAME_DATE, note.date)
+            put(Note.COLUMN_NAME_PRIVATE, note.private)
 
-            put(Note.COLUMN_NAME_PRIVATE, if (note.private) 1 else 0)
-            if (note.private && !note.password.isNullOrEmpty()) {
-                put(Note.COLUMN_NAME_PASSWORD, Security.encryptPassword(note.password!!))
-            }
+//            if (note.private && !note.password.isNullOrEmpty()) {
+//                put(Note.COLUMN_NAME_PASSWORD, Security.encryptPassword(note.password!!))
+//            }
         }
         try {
             //  whereClause = ? , whereArgs arrayOf("${note.id}")
@@ -86,7 +86,9 @@ class NoteDAO(context: Context) {
             Note.COLUMN_NAME_ID,
             Note.COLUMN_NAME_TITLE,
             Note.COLUMN_NAME_DESCRIPTION,
-            Note.COLUMN_NAME_DATE)
+            Note.COLUMN_NAME_DATE,
+            Note.COLUMN_NAME_PRIVATE
+        )
 
         val selection = "${Note.COLUMN_NAME_ID} = $id"
 
@@ -112,13 +114,12 @@ class NoteDAO(context: Context) {
                 val description = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DESCRIPTION))
                 val date = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DATE))
                 val private = cursor.getInt(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PRIVATE)) == 1
-                val password = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PASSWORD))
 
-                note = Note(id, title, description, date, private, password)
+                note = Note(id, title, description, date, private)
 
 
             }// Si la nota es privada y tiene una contraseña, pedirla al usuario
-            if (note != null) {
+            /*if (note != null) {
                 if (note.isPasswordProtected()) {
                     // Aquí se pedirá la contraseña
                     val passwordCorrect = promptForPassword(context, note?.password!!)
@@ -127,7 +128,7 @@ class NoteDAO(context: Context) {
                     }
 
                 }
-            }
+            }*/
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
@@ -143,7 +144,8 @@ class NoteDAO(context: Context) {
             Note.COLUMN_NAME_ID,
             Note.COLUMN_NAME_TITLE,
             Note.COLUMN_NAME_DESCRIPTION,
-            Note.COLUMN_NAME_DATE
+            Note.COLUMN_NAME_DATE,
+            Note.COLUMN_NAME_PRIVATE
         )
 
         var noteList: MutableList<Note> = mutableListOf()
@@ -164,8 +166,9 @@ class NoteDAO(context: Context) {
                 val title = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_TITLE))
                 val description = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DESCRIPTION))
                 val date = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DATE))
+                val private = cursor.getInt(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PRIVATE)) == 1
 
-                val note = Note(id, title, description, date)
+                val note = Note(id, title, description, date, private)
                 noteList.add(note)
             }
         } catch (e: Exception) {
@@ -183,7 +186,8 @@ class NoteDAO(context: Context) {
             Note.COLUMN_NAME_ID,
             Note.COLUMN_NAME_TITLE,
             Note.COLUMN_NAME_DESCRIPTION,
-            Note.COLUMN_NAME_DATE
+            Note.COLUMN_NAME_DATE,
+            Note.COLUMN_NAME_PRIVATE
         )
 
         val selection = "${Note.COLUMN_NAME_PRIVATE} = 0"  // 0 para false, 1 para true
@@ -206,8 +210,9 @@ class NoteDAO(context: Context) {
                 val title = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_TITLE))
                 val description = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DESCRIPTION))
                 val date = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DATE))
+                val private = cursor.getInt(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PRIVATE)) == 1
 
-                val note = Note(id, title, description, date)
+                val note = Note(id, title, description, date, private)
                 noteList.add(note)
             }
         } catch (e: Exception) {
@@ -225,7 +230,8 @@ class NoteDAO(context: Context) {
             Note.COLUMN_NAME_ID,
             Note.COLUMN_NAME_TITLE,
             Note.COLUMN_NAME_DESCRIPTION,
-            Note.COLUMN_NAME_DATE
+            Note.COLUMN_NAME_DATE,
+            Note.COLUMN_NAME_PRIVATE
         )
 
         val order = if (ascending) "ASC" else "DESC"  // "ASC" para ascendente, "DESC" para descendente
@@ -247,8 +253,9 @@ class NoteDAO(context: Context) {
                 val title = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_TITLE))
                 val description = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DESCRIPTION))
                 val date = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DATE))
+                val private = cursor.getInt(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PRIVATE)) == 1
 
-                val note = Note(id, title, description, date)
+                val note = Note(id, title, description, date, private)
                 noteList.add(note)
             }
         } catch (e: Exception) {

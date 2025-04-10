@@ -29,9 +29,6 @@
         android:layout_marginBottom="16dp"
         android:inputType="textCapSentences"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
     <EditText
         android:id="@+id/noteDescriptionEditText"
         android:layout_width="match_parent"
