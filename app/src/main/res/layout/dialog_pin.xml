@@ -1,0 +1,28 @@
+<!-- res/layout/dialog_password.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/instructionsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Por favor ingresa el PIN de 6 dígitos para acceder a la nota privada."
+        android:textSize="16sp"
+        android:paddingBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/pinEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="_ _ _ _ _ _"
+        android:textAlignment="center"
+        android:background="@android:color/transparent"
+        android:inputType="numberPassword"
+
+        android:maxLength="6"
+        android:importantForAccessibility="yes" />
+</LinearLayout>

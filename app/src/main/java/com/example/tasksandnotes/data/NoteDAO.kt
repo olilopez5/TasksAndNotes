@@ -192,6 +192,51 @@ class NoteDAO(context: Context) {
 
         val selection = "${Note.COLUMN_NAME_PRIVATE} = 0"  // 0 para false, 1 para true
 
+        val publicNoteList: MutableList<Note> = mutableListOf()
+
+        try {
+            val cursor = db.query(
+                Note.TABLE_NAME,   // La tabla de notas
+                projection,        // Las columnas a devolver
+                selection,         // Condición para notas públicas
+                null,              // No hay argumentos adicionales
+                null,              // No agrupar filas
+                null,              // No filtrar por grupos de filas
+                null               // Sin ordenar (lo ordenaremos después si lo deseamos)
+            )
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_ID))
+                val title = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_TITLE))
+                val description = cursor.getString(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DESCRIPTION))
+                val date = cursor.getLong(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_DATE))
+                val private = cursor.getInt(cursor.getColumnIndexOrThrow(Note.COLUMN_NAME_PRIVATE)) == 0
+
+                val note = Note(id, title, description, date, private)
+                publicNoteList.add(note)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            db.close()
+        }
+
+        return publicNoteList
+    }
+
+    fun findPrivateNotes(): List<Note> {
+        val db = databaseManager.readableDatabase
+
+        val projection = arrayOf(
+            Note.COLUMN_NAME_ID,
+            Note.COLUMN_NAME_TITLE,
+            Note.COLUMN_NAME_DESCRIPTION,
+            Note.COLUMN_NAME_DATE,
+            Note.COLUMN_NAME_PRIVATE
+        )
+
+        val selection = "${Note.COLUMN_NAME_PRIVATE} = 1"  // 0 para false, 1 para true
+
         val noteList: MutableList<Note> = mutableListOf()
 
         try {

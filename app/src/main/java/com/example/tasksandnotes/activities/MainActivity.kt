@@ -2,6 +2,8 @@ package com.example.tasksandnotes.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.Toast
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +18,7 @@ import com.example.tasksandnotes.data.NoteDAO
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
+import com.example.tasksandnotes.utils.PinManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -91,13 +94,29 @@ class MainActivity : AppCompatActivity() {
             },
         )
 
-        noteAdapter = NoteAdapter(emptyList(), { position ->
+        noteAdapter = NoteAdapter(emptyList(),      { position ->
             val note = noteList[position]
-
-            val intent = Intent(this, NoteActivity::class.java)
-            intent.putExtra(NoteActivity.NOTE_ID, note.id)
-            startActivity(intent)
-        }, { position ->
+            if (PinManager.isPinSet(this)) {
+                // Si el PIN está configurado, mostrar el cuadro de diálogo para ingresarlo
+                showPinDialog {
+                    val enteredPin = it
+                    if (PinManager.checkPin(this, enteredPin)) {
+                        // El PIN es correcto, accede a la nota
+                        val intent = Intent(this, NoteActivity::class.java)
+                        intent.putExtra(NoteActivity.NOTE_ID, note.id)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this, "PIN incorrecto", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                // Si no se ha configurado el PIN, se accede directamente a la nota
+                val intent = Intent(this, NoteActivity::class.java)
+                intent.putExtra(NoteActivity.NOTE_ID, note.id)
+                startActivity(intent)
+            }
+        },
+            { position ->
             val note = noteList[position]
 
             AlertDialog.Builder(this)
@@ -176,9 +195,19 @@ class MainActivity : AppCompatActivity() {
         taskList = taskDAO.findAll()
         taskAdapter.updateItems(taskList)
 
-        noteList = noteDAO.findAll()
+        noteList = noteDAO.findPublicNotes()
         noteAdapter.updateItems(noteList)
 
+//        if ()
+//        noteList = noteDAO.findPrivateNotes()
+//        noteAdapter.updateItems(noteList)
+
+
+
+
+
+
+        // Contador de tareas pendientes
         val toDoTasksNumber = taskDAO.countByNotDone()
         val tasksTab = binding.tabs.getTabAt(0)!!
         if (toDoTasksNumber > 0) {
@@ -191,4 +220,22 @@ class MainActivity : AppCompatActivity() {
             tasksTab.removeBadge()
         }
     }
+    private fun showPinDialog(onPinEntered: (String) -> Unit) {
+        // Infla el layout del diálogo usando ViewBinding
+        val dialogBinding = com.example.tasksandnotes.databinding.DialogPinInputBinding.inflate(layoutInflater)
+
+        // Ahora accedes al EditText usando ViewBinding
+        val pinEditText: EditText = dialogBinding.pinEditText
+
+        AlertDialog.Builder(this)
+            .setTitle("Ingrese su PIN")
+            .setView(dialogBinding.root)  // Usamos el root del binding aquí
+            .setPositiveButton("Aceptar") { _, _ ->
+                val enteredPin = pinEditText.text.toString()
+                onPinEntered(enteredPin)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
 }
