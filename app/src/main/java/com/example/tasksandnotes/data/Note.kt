@@ -7,8 +7,7 @@ data class Note(
     var title: String,
     var description: String,
     var date: Long,
-    var private : Boolean = true,
-    var password: String? = null
+    var private : Boolean = true
 
 ) {
     companion object{
@@ -23,9 +22,7 @@ data class Note(
 
     }
 
-    fun isPasswordProtected(): Boolean {
-        return private && !password.isNullOrEmpty()
-    }
+
     fun getCalendar(): Calendar {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = date
