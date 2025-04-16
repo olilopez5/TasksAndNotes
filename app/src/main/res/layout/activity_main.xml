@@ -11,13 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- MaterialToolbar -->
+        <!-- MaterialToolbar  -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?actionBarSize"
             app:title="Task and Notes"/>
+
+
 
         <!-- TabLayout con TabItems -->
         <com.google.android.material.tabs.TabLayout
@@ -40,18 +42,17 @@
                 android:text="Notes"/>
 
         </com.google.android.material.tabs.TabLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- RecyclerView para las tareas y notas -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        android:paddingBottom="128dp"
-        android:clipToPadding="false"/>
 
 
     <!-- Floating Action Button para agregar elementos -->
@@ -75,6 +76,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/ic_calendar_tab" />
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

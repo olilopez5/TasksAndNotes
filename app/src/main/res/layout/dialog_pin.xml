@@ -10,7 +10,7 @@
         android:id="@+id/instructionsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Por favor ingresa el PIN de 6 dígitos para acceder a la nota privada."
+        android:text="Por favor ingresa el PIN de 6 dígitos para acceder a notas privadas."
         android:textSize="16sp"
         android:paddingBottom="16dp"/>
 
@@ -25,4 +25,16 @@
 
         android:maxLength="6"
         android:importantForAccessibility="yes" />
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+
 </LinearLayout>

@@ -4,32 +4,33 @@ import android.content.Context
 
 object PinManager {
 
-    private const val PREF_NAME = "app_preferences"
+    private const val PREF_NAME = "pin_prefs"
     private const val PIN_KEY = "user_pin"
 
-    // Guardar el PIN en SharedPreferences
-    fun savePin(context: Context, pinHash: String) {
-        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(PIN_KEY, pinHash)
-        editor.apply()
+    fun savePin(context: Context, pin: String) {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putString(PIN_KEY, pin).apply()
     }
 
-    // Verificar si el PIN ya está configurado
+    fun getStoredPin(context: Context): String? {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(PIN_KEY, null)
+    }
+
     fun isPinSet(context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.contains(PIN_KEY)
+        return !getStoredPin(context).isNullOrEmpty()
     }
 
-    // Verificar el PIN ingresado por el usuario
     fun checkPin(context: Context, enteredPin: String): Boolean {
-        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val storedPinHash = sharedPreferences.getString(PIN_KEY, null)
-
-        if (storedPinHash != null) {
-            val enteredPinHash = Security.encryptPassword(enteredPin)
-            return enteredPinHash == storedPinHash
-        }
-        return false
+        return getStoredPin(context) == enteredPin
     }
 }
+
+
+
+
+
+
+
+
+

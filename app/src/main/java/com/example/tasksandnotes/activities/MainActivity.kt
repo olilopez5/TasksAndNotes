@@ -2,15 +2,17 @@ package com.example.tasksandnotes.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.example.tasksandnotes.adapters.MainViewPagerAdapter
 import com.example.tasksandnotes.adapters.NoteAdapter
 import com.example.tasksandnotes.adapters.TaskAdapter
 import com.example.tasksandnotes.data.Note
@@ -18,38 +20,45 @@ import com.example.tasksandnotes.data.NoteDAO
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
-import com.example.tasksandnotes.utils.PinManager
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var taskDAO: TaskDAO
+    private lateinit var noteDAO: NoteDAO
 
-    lateinit var taskDAO: TaskDAO
-    lateinit var noteDAO: NoteDAO
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
+    private lateinit var pagerAdapter: MainViewPagerAdapter
 
-    lateinit var taskList : List<Task>
-    lateinit var noteList : List<Note>
-
-    lateinit var taskAdapter: TaskAdapter
-    lateinit var noteAdapter: NoteAdapter
-
+//    private lateinit var taskList: List<Task>
+//    private lateinit var noteAdapter: NoteAdapter
+//    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //setSupportActionBar(binding.toolbar)
 
-        setSupportActionBar(binding.toolbar)
+        taskDAO = TaskDAO(this)
+        noteDAO = NoteDAO(this)
 
-        // Crear el MaterialDatePicker
-        val materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Fecha actual
-            .build()
+        // Inicializar el ViewPager2 y el TabLayout
+        viewPager = binding.viewPager
+        tabLayout = binding.tabs
+
+        // Configurar el adapter para el ViewPager2
+        pagerAdapter = MainViewPagerAdapter(this)
+        binding.viewPager.adapter = pagerAdapter
+
+
+        enableEdgeToEdge()
+
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -57,185 +66,87 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        taskDAO = TaskDAO(this)
-        noteDAO = NoteDAO(this)
 
-        taskAdapter = TaskAdapter(
-            emptyList(),
-            { position ->
-                val task = taskList[position]
+         fun setupButtons() {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
 
-                val intent = Intent(this, TaskActivity::class.java)
-                intent.putExtra(TaskActivity.TASK_ID, task.id)
-                startActivity(intent)
-            },
-            { position ->
-                val task = taskList[position]
-
-                AlertDialog.Builder(this)
-                    .setTitle("Delete task")
-                    .setMessage("Are you sure you want to delete this task?")
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        taskDAO.delete(task)
-                        refreshData()
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setCancelable(false)
-                    .show()
-
-            },
-            { position ->
-                val task = taskList[position]
-
-                task.done = !task.done
-                taskDAO.update(task)
-                refreshData()
-
-            },
-        )
-
-        noteAdapter = NoteAdapter(emptyList(),      { position ->
-            val note = noteList[position]
-            if (PinManager.isPinSet(this)) {
-                // Si el PIN está configurado, mostrar el cuadro de diálogo para ingresarlo
-                showPinDialog {
-                    val enteredPin = it
-                    if (PinManager.checkPin(this, enteredPin)) {
-                        // El PIN es correcto, accede a la nota
-                        val intent = Intent(this, NoteActivity::class.java)
-                        intent.putExtra(NoteActivity.NOTE_ID, note.id)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, "PIN incorrecto", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                // Si no se ha configurado el PIN, se accede directamente a la nota
-                val intent = Intent(this, NoteActivity::class.java)
-                intent.putExtra(NoteActivity.NOTE_ID, note.id)
-                startActivity(intent)
+            binding.viewCalendar.setOnClickListener {
+                datePicker.show(supportFragmentManager, "DATE_PICKER")
             }
-        },
-            { position ->
-            val note = noteList[position]
 
-            AlertDialog.Builder(this)
-                .setTitle("Delete note")
-                .setMessage("Are you sure you want to delete this note?")
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    noteDAO.delete(note)
-                    refreshData()
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-                .setCancelable(false)
-                .show()
-
-        },)
-
-
-        binding.recyclerView.adapter = taskAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-
-        binding.addNewItem.setOnClickListener {
-            val intent = Intent(this, TaskActivity::class.java)
-            startActivity(intent)
-        }
-
-
-        binding.tabs.addOnTabSelectedListener(object: OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
+            binding.addNewItem.setOnClickListener {
                 when (binding.tabs.selectedTabPosition) {
-                    0 -> {
-                        // Cargo las tareas
-                        binding.recyclerView.adapter = taskAdapter
-                    }
-                    1 -> {
-                        // Cargo las notas
-                        binding.recyclerView.adapter = noteAdapter
-                    }
-                }
-                //  supportActionBar?.title = tab.text
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-        })
-
-        binding.viewCalendar.setOnClickListener {
-            materialDatePicker.show(supportFragmentManager, "DATE_PICKER")
-        }
-
-
-
-        binding.addNewItem.setOnClickListener { view ->
-            when (binding.tabs.selectedTabPosition) {
-                0 -> {
-                    // Creo una tarea
-                    val intent = Intent(this, TaskActivity::class.java)
-                    startActivity(intent)
-                }
-                1 -> {
-                    // Creo una nota
-                    val intent = Intent(this, NoteActivity::class.java)
-                    startActivity(intent)
+                    0 -> startActivity(Intent(this, TaskActivity::class.java))
+                    1 -> startActivity(Intent(this, NoteActivity::class.java))
                 }
             }
         }
-    }
 
 
-    override fun onResume() {
-        super.onResume()
+        fun setupTabs() {
+            // Configurar el ViewPager2 con el adaptador de fragmentos
+            val adapter = MainViewPagerAdapter(this)
+            binding.viewPager.adapter = adapter
+
+            // Asociar TabLayout con ViewPager2
+            TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+                when (position) {
+                    0 -> tab.text = "Tasks"  // Primer Tab para Tareas
+                    1 -> tab.text = "Notes"  // Segundo Tab para Notas
+                }
+            }.attach()
+        }
+
+        setupButtons()
+        setupTabs()
         refreshData()
+
+
     }
 
-    private fun refreshData() {
-        taskList = taskDAO.findAll()
-        taskAdapter.updateItems(taskList)
-
-        noteList = noteDAO.findPublicNotes()
-        noteAdapter.updateItems(noteList)
-
-//        if ()
-//        noteList = noteDAO.findPrivateNotes()
-//        noteAdapter.updateItems(noteList)
-
-
-
-
-
-
-        // Contador de tareas pendientes
-        val toDoTasksNumber = taskDAO.countByNotDone()
+    fun updateTaskBadge(count: Int) {
         val tasksTab = binding.tabs.getTabAt(0)!!
-        if (toDoTasksNumber > 0) {
-            // Get badge from tab (or create one if none exists)
+        if (count > 0) {
             val badge = tasksTab.getOrCreateBadge()
-            // Customize badge
-            badge.number = toDoTasksNumber
+            badge.number = count
         } else {
-            // Remove badge from tab
             tasksTab.removeBadge()
         }
     }
-    private fun showPinDialog(onPinEntered: (String) -> Unit) {
-        // Infla el layout del diálogo usando ViewBinding
-        val dialogBinding = com.example.tasksandnotes.databinding.DialogPinInputBinding.inflate(layoutInflater)
 
-        // Ahora accedes al EditText usando ViewBinding
-        val pinEditText: EditText = dialogBinding.pinEditText
-
-        AlertDialog.Builder(this)
-            .setTitle("Ingrese su PIN")
-            .setView(dialogBinding.root)  // Usamos el root del binding aquí
-            .setPositiveButton("Aceptar") { _, _ ->
-                val enteredPin = pinEditText.text.toString()
-                onPinEntered(enteredPin)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+    override fun onResume() {
+        super.onResume()
+        //refreshData()
     }
 
+    fun refreshData() {
+        val toDoTasksNumber = taskDAO.countByNotDone()
+        updateTaskBadge(toDoTasksNumber)
+    }
+
+
+
+
+//    val toDoTasksNumber = taskDAO.countByNotDone()
+//    val tasksTab = binding.tabs.getTabAt(0)!!
+//    if (toDoTasksNumber > 0) {
+//        val badge = tasksTab.getOrCreateBadge()
+//        badge.number = toDoTasksNumber
+//    } else {
+//        tasksTab.removeBadge()
+//    }
+
 }
+
+
+
+
+
+
+
+
+
+
+

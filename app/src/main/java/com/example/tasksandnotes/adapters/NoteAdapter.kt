@@ -11,7 +11,7 @@ import com.example.tasksandnotes.databinding.ItemNoteBinding
 import com.example.tasksandnotes.utils.PinDialog
 
 class NoteAdapter(
-    private var items: List<Note>,
+    var items: List<Note>,
     //private var privateItems: List<Note>,
     val onClick: (Int) -> Unit,
     val onDelete: (Int) -> Unit
@@ -36,9 +36,9 @@ class NoteAdapter(
         holder.binding.deleteButton.setOnClickListener {
             onDelete(position)
         }
-        holder.binding.privateFolderButton.setOnClickListener{
-            onClick(position)
-        }
+//        holder.binding.privateFolderButton.setOnClickListener{
+//            onClick(position)
+//        }
     }
 
     fun updateItems(items: List<Note>) {
@@ -52,8 +52,6 @@ class NoteViewHolder(val binding: ItemNoteBinding) : ViewHolder(binding.root) {
     fun render(note: Note) {
 
         if (note.private) {
-
-            // Agregar un listener para solicitar la contraseña
             binding.root.setOnClickListener {
                 showPinDialog(note)
             }
@@ -65,7 +63,10 @@ class NoteViewHolder(val binding: ItemNoteBinding) : ViewHolder(binding.root) {
 
     private fun showPinDialog(note: Note) {
         // Aquí estamos pasando el contexto de la actividad y la contraseña de la nota
-        val dialog = PinDialog(itemView.context, note.password ?: "")
+        val dialog = PinDialog(
+            itemView.context, correctPin = "",
+            onSuccess = { openNote(note) }
+        )
         dialog.show()
     }
 
