@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.tasksandnotes.R
 import com.example.tasksandnotes.adapters.MainViewPagerAdapter
 import com.example.tasksandnotes.adapters.NoteAdapter
 import com.example.tasksandnotes.adapters.TaskAdapter
@@ -20,6 +21,7 @@ import com.example.tasksandnotes.data.NoteDAO
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
+import com.example.tasksandnotes.utils.PinManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -34,9 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var pagerAdapter: MainViewPagerAdapter
 
-//    private lateinit var taskList: List<Task>
-//    private lateinit var noteAdapter: NoteAdapter
-//    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         // Configurar el adapter para el ViewPager2
         pagerAdapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = pagerAdapter
+
 
 
         enableEdgeToEdge()
@@ -91,10 +91,16 @@ class MainActivity : AppCompatActivity() {
             binding.viewPager.adapter = adapter
 
             // Asociar TabLayout con ViewPager2
-            TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 when (position) {
-                    0 -> tab.text = "Tasks"  // Primer Tab para Tareas
-                    1 -> tab.text = "Notes"  // Segundo Tab para Notas
+                    0 -> {
+                        tab.setIcon(R.drawable.ic_tasks_tab)
+                        tab.text = "Tasks"
+                    }
+                    1 -> {
+                        tab.setIcon(R.drawable.ic_notes_tab)
+                        tab.text = "Notes"
+                    }
                 }
             }.attach()
         }

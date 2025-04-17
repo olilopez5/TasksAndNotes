@@ -2,19 +2,18 @@ package com.example.tasksandnotes.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasksandnotes.R
 import com.example.tasksandnotes.activities.NoteActivity
 import com.example.tasksandnotes.activities.PinSetupActivity
 import com.example.tasksandnotes.adapters.NoteAdapter
-import com.example.tasksandnotes.data.Note
 import com.example.tasksandnotes.databinding.FragmentNotesBinding
 import com.example.tasksandnotes.utils.PinDialog
 import com.example.tasksandnotes.utils.PinManager
@@ -33,17 +32,17 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNotesBinding.inflate(inflater, container, false)
 
         if (!PinManager.isPinSet(requireContext())) {
             startActivity(Intent(requireContext(), PinSetupActivity::class.java))
-            //TODO
+            return binding.root
         }
-
 
         // Configurar el RecyclerView para mostrar notas
         binding.publicNotesRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.privateNotesRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // Cargar las notas públicas por defecto
         loadPublicNotes()
@@ -56,6 +55,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             } else {
                 val dialog = PinDialog(requireContext(), storedPin) {
                     // Si el PIN es correcto, mostrar las notas privadas
+                    Log.d("PinValidation", "PIN Correcto, mostrando notas privadas.")
                     showPrivateNotes()
                 }
                 dialog.show()
@@ -89,114 +89,66 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         )
 
         binding.publicNotesRecyclerView.adapter = noteAdapter
+
+        // Establecer el estado de visibilidad de notas privadas
+        isPrivateNotesVisible = false
     }
 
+
+
+
+
     private fun showPrivateNotes() {
-        // Obtener todas las notas desde la base de datos
-        val notes = noteDAO.findAll()
-        val privateNotes = notes.filter { it.private }
 
-        fun setupAdapters() {
+        val privateNotes = noteDAO.findPrivateNotes()
+        Log.d("PrivateNotes", "Notas privadas encontradas: ${privateNotes.size}")
 
-
-            noteAdapter = NoteAdapter(
-                emptyList(),
-                onClick = { position ->
-                    val note = noteAdapter.items[position]
-                    if (note.private) {
-                        showPinDialog { enteredPin ->
-                            if (PinManager.checkPin(requireContext(), enteredPin)) {
-                                openNote(note)
-                            } else {
-                                Toast.makeText(requireContext(), "PIN incorrecto", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    } else {
-                        openNote(note)
+        // Configurar el Adapter con las notas privadas
+        noteAdapter = NoteAdapter(
+            privateNotes,
+            onClick = { position ->
+                val note = privateNotes[position]
+                val intent = Intent(requireContext(), NoteActivity::class.java)
+                intent.putExtra(NoteActivity.NOTE_ID, note.id)
+                startActivity(intent)
+            },
+            onDelete = { position ->
+                val note = privateNotes[position]
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete note")
+                    .setMessage("Are you sure you want to delete this note?")
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        noteDAO.delete(note)
+                        showPrivateNotes() // Recargar las notas privadas después de eliminar
                     }
-                },
-                onDelete = { position ->
-                    val note = noteAdapter.items[position]
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Delete note")
-                        .setMessage("Are you sure you want to delete this note?")
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            noteDAO.delete(note)
-                            refreshData()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
-                }
-            )
-        }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            }
+        )
+        binding.privateNotesRecyclerView.adapter = noteAdapter
 
-        binding.publicNotesRecyclerView.adapter = noteAdapter
+        // Asegurarnos de que el RecyclerView de notas privadas esté visible
+        binding.privateNotesRecyclerView.visibility = View.VISIBLE
+        binding.publicNotesRecyclerView.visibility = View.GONE // Si quieres ocultar las notas públicas
+
+        // Notificar al adaptador que los datos han cambiado
+        noteAdapter.notifyDataSetChanged()
+
+        // Establecer el estado de visibilidad de notas privadas
+        isPrivateNotesVisible = true
     }
 
     override fun onResume() {
         super.onResume()
 
-        // Si estamos mostrando las notas privadas, las recargamos
+        // Recargar notas públicas o privadas al volver al Fragment
         if (isPrivateNotesVisible) {
             showPrivateNotes()
         } else {
             loadPublicNotes()
         }
     }
-
-    private fun showPinDialogThenLoadPrivateNotes() {
-        val storedPin = PinManager.getStoredPin(requireContext())
-        if (storedPin.isNullOrEmpty()) {
-            Toast.makeText(requireContext(), "No hay PIN guardado", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val dialog = PinDialog(
-            context = requireContext(),
-            correctPin = storedPin,
-            onSuccess = {
-                loadPrivateNotes()
-            }
-        )
-        dialog.show()
-    }
-
-    fun showPinDialog(onPinEntered: (String) -> Unit) {
-        val dialogBinding = DialogPinBinding.inflate(layoutInflater)
-        val pinEditText: EditText = dialogBinding.pinEditText
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Ingrese su PIN")
-            .setView(dialogBinding.root)
-            .setPositiveButton("Aceptar") { _, _ ->
-                val enteredPin = pinEditText.text.toString()
-                onPinEntered(enteredPin)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
-//    private fun loadPublicNotes() {
-//        val publicNotes = noteDAO.findPublicNotes()
-//        noteAdapter.updateItems(publicNotes)
-//    }
-
-    private fun loadPrivateNotes() {
-        val privateNotes = noteDAO.findPrivateNotes()
-        noteAdapter.updateItems(privateNotes)
-    }
-
-    private fun openNote(note: Note) {
-        val intent = Intent(requireContext(), NoteActivity::class.java)
-        intent.putExtra(NoteActivity.NOTE_ID, note.id)
-        startActivity(intent)
-    }
-
-    private fun refreshData() {
-        val noteDAO = NoteDAO(requireContext())
-        val notes = noteDAO.findAll()
-        noteAdapter.updateItems(notes)
 }
-}
+
 
 

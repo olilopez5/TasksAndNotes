@@ -2,6 +2,7 @@ package com.example.tasksandnotes.adapters
 
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -49,31 +50,39 @@ class NoteAdapter(
 
 class NoteViewHolder(val binding: ItemNoteBinding) : ViewHolder(binding.root) {
 
-    fun render(note: Note) {
-
+  fun render(note: Note) {
         if (note.private) {
-            binding.root.setOnClickListener {
-                showPinDialog(note)
-            }
-        } else {
-            // Nota pública
+            // Ocultamos título y botones
             binding.titleTextView.text = note.title
+            binding.editButton.visibility = View.VISIBLE
+            binding.deleteButton.visibility = View.VISIBLE
+
+
+        } else {
+            // Nota pública: mostramos todo
+            binding.titleTextView.text = note.title
+            binding.editButton.visibility = View.VISIBLE
+            binding.deleteButton.visibility = View.VISIBLE
+
+            // El click general se gestiona en el adapter, no aquí
+            binding.root.setOnClickListener(null)
         }
     }
 
-    private fun showPinDialog(note: Note) {
-        // Aquí estamos pasando el contexto de la actividad y la contraseña de la nota
-        val dialog = PinDialog(
-            itemView.context, correctPin = "",
-            onSuccess = { openNote(note) }
-        )
-        dialog.show()
-    }
 
-    private fun openNote(note: Note) {
-        // Aquí puedes abrir la nota o hacer cualquier otra acción si no es privada
-        val intent = Intent(itemView.context, NoteActivity::class.java)
-        intent.putExtra(NoteActivity.NOTE_ID, note.id)
-        itemView.context.startActivity(intent)
-    }
+//    private fun showPinDialog(note: Note) {
+//        // Aquí estamos pasando el contexto de la actividad y la contraseña de la nota
+//        val dialog = PinDialog(
+//            itemView.context, correctPin = "",
+//            onSuccess = { openNote(note) }
+//        )
+//        dialog.show()
+//    }
+
+//    private fun openNote(note: Note) {
+//        // Aquí puedes abrir la nota o hacer cualquier otra acción si no es privada
+//        val intent = Intent(itemView.context, NoteActivity::class.java)
+//        intent.putExtra(NoteActivity.NOTE_ID, note.id)
+//        itemView.context.startActivity(intent)
+//    }
 }

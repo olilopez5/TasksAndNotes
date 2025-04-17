@@ -46,13 +46,18 @@
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/privateNotesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"/>
 
         <!-- RecyclerView para las notas públicas -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/publicNotesRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:scrollbars="vertical"/>
     </LinearLayout>

@@ -28,12 +28,15 @@ class NoteActivity : AppCompatActivity() {
 
         binding = ActivityNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
 
         val id = intent.getLongExtra(NOTE_ID, -1L)
 
