@@ -8,10 +8,9 @@ import androidx.appcompat.app.AlertDialog
 import com.example.tasksandnotes.databinding.DialogPinBinding
 import com.example.tasksandnotes.databinding.DialogPinInputBinding
 
-class PinDialog(
-    private val context: Context,
-    private val correctPin: String,
-    private val onSuccess: () -> Unit
+class PinDialog(private val context: Context,
+                private val correctPin: String,
+                private val onSuccess: () -> Unit
 ) {
 
     fun show() {

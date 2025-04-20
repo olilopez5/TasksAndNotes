@@ -64,15 +64,37 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         )
         binding.recyclerViewTasks.adapter = taskAdapter
 
-        // Configura el RecyclerView
-//        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        binding.recyclerView.adapter = taskAdapter
 
-        // Cargar las tareas
         loadTasks()
 
         return binding.root
     }
+
+    fun showAddTaskDialog() {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
+        val editText = dialogView.findViewById<android.widget.EditText>(R.id.editTextTaskTitle)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Add Task")
+            .setView(dialogView)
+            .setPositiveButton("Save") { _, _ ->
+                val title = editText.text.toString().trim()
+                if (title.isNotEmpty()) {
+                    val task = Task(id = -1L, title = title)
+                    taskDAO.insert(task)
+                    refreshData()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("refreshData", "Actualizamos los datos")
+        refreshData()
+    }
+
 
     private fun refreshData() {
         val taskDAO = TaskDAO(requireContext())

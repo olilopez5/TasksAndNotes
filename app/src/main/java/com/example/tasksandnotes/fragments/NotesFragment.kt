@@ -18,7 +18,7 @@ import com.example.tasksandnotes.databinding.FragmentNotesBinding
 import com.example.tasksandnotes.utils.PinDialog
 import com.example.tasksandnotes.utils.PinManager
 import com.example.tasksandnotes.data.NoteDAO
-import com.example.tasksandnotes.databinding.DialogPinBinding
+import com.example.tasksandnotes.data.TaskDAO
 
 
 class NotesFragment : Fragment(R.layout.fragment_notes) {
@@ -40,12 +40,35 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             return binding.root
         }
 
+        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.buttonPublic -> {
+                        loadPublicNotes()
+                    }
+                    R.id.buttonPrivate -> {
+                        val storedPin = PinManager.getStoredPin(requireContext())
+                        if (storedPin.isNullOrEmpty()) {
+                            Toast.makeText(requireContext(), "Primero configura un PIN", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val dialog = PinDialog(requireContext(), storedPin) {
+                                showPrivateNotes()
+                            }
+                            dialog.show()
+                        }
+                    }
+                }
+            }
+        }
+
+
         // Configurar el RecyclerView para mostrar notas
         binding.publicNotesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.privateNotesRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // Cargar las notas públicas por defecto
         loadPublicNotes()
+
 
         // Configurar el click del card para las notas privadas
         binding.privateNotesCard.setOnClickListener {
@@ -65,12 +88,12 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         return binding.root
     }
 
+
     private fun loadPublicNotes() {
         // Obtener todas las notas desde la base de datos
         noteDAO = NoteDAO(requireContext())
+        val publicNotes = noteDAO.findPublicNotes()
 
-        val notes = noteDAO.findAll()
-        val publicNotes = notes.filter { !it.private }
 
         // Configurar el Adapter con las notas públicas
         noteAdapter = NoteAdapter(
@@ -93,8 +116,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         // Establecer el estado de visibilidad de notas privadas
         isPrivateNotesVisible = false
     }
-
-
 
 
 
@@ -138,9 +159,11 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         isPrivateNotesVisible = true
     }
 
+
+
+
     override fun onResume() {
         super.onResume()
-
         // Recargar notas públicas o privadas al volver al Fragment
         if (isPrivateNotesVisible) {
             showPrivateNotes()
@@ -148,7 +171,26 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             loadPublicNotes()
         }
     }
+    override fun onStart() {
+        super.onStart()
+        Log.d("REFRESH", "Actualizamos notas publicas")
+        refreshPublicNotes()
+        Log.d("REFRESH", "Actualizamos notaas privadas")
+        refreshPrivateNotes()
+    }
+
+
+    private fun refreshPublicNotes() {
+        val noteDAO = NoteDAO(requireContext())
+        val publicNotes = noteDAO.findPublicNotes()
+        noteAdapter.updateItems(publicNotes)
+    }
+
+    private fun refreshPrivateNotes() {
+        val noteDAO = NoteDAO(requireContext())
+        val privateNotes = noteDAO.findPrivateNotes()
+        noteAdapter.updateItems(privateNotes)
+    }
+
+
 }
-
-
-

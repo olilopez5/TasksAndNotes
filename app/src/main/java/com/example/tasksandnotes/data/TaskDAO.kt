@@ -17,6 +17,7 @@ class TaskDAO(context: Context) {
         val values = ContentValues().apply {
             put(Task.COLUMN_NAME_TITLE,task.title)
             put(Task.COLUMN_NAME_DONE,task.done)
+            //put(Task.COLUMN_NAME_PRIORITY,task.priority)
         }
         // new row, return PK od new row (insert ? error)
         try {

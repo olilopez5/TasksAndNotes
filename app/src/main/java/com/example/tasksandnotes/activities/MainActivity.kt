@@ -21,6 +21,7 @@ import com.example.tasksandnotes.data.NoteDAO
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
+import com.example.tasksandnotes.fragments.TasksFragment
 import com.example.tasksandnotes.utils.PinManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
@@ -68,24 +69,32 @@ class MainActivity : AppCompatActivity() {
 
 
          fun setupButtons() {
-            val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build()
+             val datePicker = MaterialDatePicker.Builder.datePicker()
+                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                 .build()
 
-            binding.viewCalendar.setOnClickListener {
-                datePicker.show(supportFragmentManager, "DATE_PICKER")
-            }
+             binding.viewCalendar.setOnClickListener {
+                 datePicker.show(supportFragmentManager, "DATE_PICKER")
+             }
 
-            binding.addNewItem.setOnClickListener {
-                when (binding.tabs.selectedTabPosition) {
-                    0 -> startActivity(Intent(this, TaskActivity::class.java))
-                    1 -> startActivity(Intent(this, NoteActivity::class.java))
-                }
-            }
-        }
+             binding.addNewItem.setOnClickListener {
+                 when (binding.tabs.selectedTabPosition) {
+                     0 -> {
+                         // Llama al AlertDialog desde el TasksFragment
+                         val fragment =
+                             supportFragmentManager.findFragmentByTag("f0") as? TasksFragment
+                         fragment?.showAddTaskDialog()
+                     }
 
+                     1 -> {
+                         // Mantén notas como estaba
+                         startActivity(Intent(this, NoteActivity::class.java))
+                     }
+                 }
+             }
+         }
 
-        fun setupTabs() {
+             fun setupTabs() {
             // Configurar el ViewPager2 con el adaptador de fragmentos
             val adapter = MainViewPagerAdapter(this)
             binding.viewPager.adapter = adapter

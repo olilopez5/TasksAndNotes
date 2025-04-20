@@ -1,5 +1,6 @@
 package com.example.tasksandnotes.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -14,6 +15,12 @@ class TaskAdapter(var items: List<Task>,
                   val onCheck: (Int) -> Unit
     ) : Adapter<TaskViewHolder>() {
 
+//    private val priorityColors = mapOf(
+//        "Low" to Color.GREEN,       // Verde
+//        "Medium" to Color.parseColor("#FF9800"), // Naranja
+//        "High" to Color.RED        // Rojo
+//    )
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskViewHolder(binding)
@@ -24,6 +31,10 @@ class TaskAdapter(var items: List<Task>,
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = items[position]
         holder.render(task)
+
+//        val priorityColor = priorityColors[task.priority] ?: Color.GREEN
+//        holder.binding.priorityCircle.setColorFilter(priorityColor)
+
         holder.itemView.setOnClickListener {
             onClick(position)
         }
