@@ -4,7 +4,7 @@ data class Task(
     var id: Long,
     var title: String,
     var done: Boolean = false,
-    //var priority: String = "Low"
+    var priority: Int
 
 ) {
     companion object{
@@ -13,7 +13,7 @@ data class Task(
         const val COLUMN_NAME_ID = "id"
         const val COLUMN_NAME_TITLE = "title"
         const val COLUMN_NAME_DONE = "done"
-        //const val COLUMN_NAME_PRIORITY = "priority"
+        const val COLUMN_NAME_PRIORITY = "priority"
 
     }
 

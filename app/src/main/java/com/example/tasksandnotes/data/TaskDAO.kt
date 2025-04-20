@@ -17,7 +17,7 @@ class TaskDAO(context: Context) {
         val values = ContentValues().apply {
             put(Task.COLUMN_NAME_TITLE,task.title)
             put(Task.COLUMN_NAME_DONE,task.done)
-            //put(Task.COLUMN_NAME_PRIORITY,task.priority)
+            put(Task.COLUMN_NAME_PRIORITY,task.priority)
         }
         // new row, return PK od new row (insert ? error)
         try {
@@ -97,8 +97,9 @@ class TaskDAO(context: Context) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_ID))
                 val title = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_TITLE))
                 val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_DONE)) != 0
+                val priority = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_PRIORITY))
 
-                task = Task(id, title, done)
+                task = Task(id, title, done, priority)
 
             }
         } catch (e: Exception) {
@@ -115,7 +116,8 @@ class TaskDAO(context: Context) {
         val projection = arrayOf(
             Task.COLUMN_NAME_ID,
             Task.COLUMN_NAME_TITLE,
-            Task.COLUMN_NAME_DONE
+            Task.COLUMN_NAME_DONE,
+            Task.COLUMN_NAME_PRIORITY
         )
 
         var taskList: MutableList<Task> = mutableListOf()
@@ -135,8 +137,9 @@ class TaskDAO(context: Context) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_ID))
                 val title = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_TITLE))
                 val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_DONE)) != 0
+                val priority = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME_PRIORITY))
 
-                val task = Task(id, title, done)
+                val task = Task(id, title, done, priority)
                 taskList.add(task)
             }
         } catch (e: Exception) {

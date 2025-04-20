@@ -14,14 +14,15 @@ class DatabaseManager (context: Context) : SQLiteOpenHelper(context,
     // y si existe cambiar la version +1 (2) ejecuta onUpgrade
 
     companion object {
-        const val DATABASE_NAME = "todolist.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_NAME = "taskAndNotes.db"
+        const val DATABASE_VERSION = 2
 
         private const val SQL_CREATE_TABLE_TASK =
             "CREATE TABLE ${Task.TABLE_NAME} (" +
                     "${Task.COLUMN_NAME_ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "${Task.COLUMN_NAME_TITLE} TEXT," +
-                    "${Task.COLUMN_NAME_DONE} BOOLEAN)"
+                    "${Task.COLUMN_NAME_DONE} BOOLEAN," +
+                    "${Task.COLUMN_NAME_PRIORITY} INTEGER)"
 
         private const val SQL_DROP_TABLE_TASK = "DROP TABLE IF EXISTS ${Task.TABLE_NAME}"
 
@@ -46,6 +47,17 @@ class DatabaseManager (context: Context) : SQLiteOpenHelper(context,
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         onDestroy(db)
         onCreate(db)
+        Log.w("DATABASE", "Upgrading database from version $oldVersion to $newVersion")
+
+        // Verifica si la versión actual es menor a la nueva versión
+        if (oldVersion < 2) {  // Nueva versión que incluye el campo de prioridad
+            // Añadir columna PRIORITY a la tabla de TASK
+            val alterTableSQL = "ALTER TABLE ${Task.TABLE_NAME} ADD COLUMN ${Task.COLUMN_NAME_PRIORITY}"
+            db.execSQL(alterTableSQL)
+            Log.i("DATABASE", "Added priority column to TASK table")
+        }
+
+        // Aquí puedes añadir más cambios si incrementas más versiones en el futuro.
     }
 
     fun onDestroy(db: SQLiteDatabase){

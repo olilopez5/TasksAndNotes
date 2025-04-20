@@ -47,7 +47,7 @@ class TaskActivity : AppCompatActivity() {
             binding.titleEditText.setText(task.title)
 
         }else{
-            task = Task(-1L,"")
+            task = Task(-1L,"",)
         }
 
         binding.saveButton.setOnClickListener {

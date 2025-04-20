@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="priority_labels">
+        <item>No priority</item>
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <array name="priority_colors">
+        <item>#FFFFFF</item> <!-- No priority: blanco -->
+        <item>#42EF8E</item> <!-- Low: verde -->
+        <item>#EB9226</item> <!-- Medium: naranja -->
+        <item>#EF3C3C</item> <!-- High: rojo -->
+    </array>
+</resources>
