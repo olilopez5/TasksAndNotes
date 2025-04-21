@@ -57,6 +57,11 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager.adapter = pagerAdapter
 
 
+        val goToNotesTab = intent.getBooleanExtra("goToNotesTab", false)
+        if (goToNotesTab) {
+            binding.viewPager.currentItem = 1 // o el índice del tab de Notes
+        }
+
 
         enableEdgeToEdge()
 

@@ -12,12 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Scroll de contenido -->
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,24 +52,17 @@
 
                 <!-- RecyclerViews -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/privateNotesRecyclerView"
+                    android:id="@+id/notesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="64dp"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:scrollbars="vertical" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/publicNotesRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="vertical" />
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
 
-        <!-- Botonera fija abajo -->
+
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
             android:layout_width="wrap_content"
@@ -83,7 +70,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:singleSelection="true">
+            app:singleSelection="true"
+            app:selectionRequired="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonPublic"
@@ -104,8 +92,10 @@
                 app:iconGravity="textEnd"
                 app:iconSize="30dp"
                 app:iconTint="@color/purple_500" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-    </LinearLayout>
 
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+    </LinearLayout>
 </FrameLayout>
 

@@ -9,8 +9,8 @@
 
     <array name="priority_colors">
         <item>#FFFFFF</item> <!-- No priority: blanco -->
-        <item>#42EF8E</item> <!-- Low: verde -->
-        <item>#EB9226</item> <!-- Medium: naranja -->
-        <item>#EF3C3C</item> <!-- High: rojo -->
+        <item>#BE42EF8E</item> <!-- Low: verde -->
+        <item>#E7AA76</item> <!-- Medium: naranja -->
+        <item>#EB4B4B</item> <!-- High: rojo -->
     </array>
 </resources>

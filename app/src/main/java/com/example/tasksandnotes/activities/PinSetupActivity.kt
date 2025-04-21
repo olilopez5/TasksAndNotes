@@ -36,10 +36,12 @@ class PinSetupActivity : AppCompatActivity() {
 
             Toast.makeText(this, "PIN guardado correctamente", Toast.LENGTH_SHORT).show()
 
-            startActivity(Intent(this, NotesFragment::class.java))
+            val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra("goToNotesTab", true) // si quieres indicarlo luego
             startActivity(intent)
             finish()
+
         }
 
         binding.btnCancel.setOnClickListener {

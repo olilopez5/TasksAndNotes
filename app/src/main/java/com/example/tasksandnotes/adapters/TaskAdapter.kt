@@ -33,15 +33,15 @@ class TaskAdapter(var items: List<Task>,
         val task = items[position]
         holder.render(task)
 
-// Asignar el color de la prioridad usando la posición
+    // Asignar el color de la prioridad usando la posición
         val priorityColor = if (task.priority in 1..3) {
             priorityColors[task.priority] // Obtener el color según el valor de la prioridad
         } else {
             Color.TRANSPARENT // Sin prioridad
         }
 
-        // Establecer el color de fondo del círculo de prioridad
-        holder.binding.priorityCircle.setBackgroundColor(priorityColor)
+        // Color del círculo
+        holder.binding.priorityCircle.setColorFilter(priorityColor)
 
 
         holder.itemView.setOnClickListener {
@@ -73,14 +73,5 @@ class TaskViewHolder(val binding: ItemTaskBinding) : ViewHolder(binding.root) {
         } else {
             binding.titleTextView.text = task.title
         }
-        // Círculo de color según prioridad
-//        val priorityColor = when (task.priority) {
-//            1 -> Color.parseColor("#4CAF50") // Verde (baja)
-//            2 ->Color.parseColor("#FF9800") // Naranja (media)
-//            3 -> Color.parseColor("#F44336") // Rojo (alta)
-//            else -> Color.TRANSPARENT // Sin prioridad
-//        }
-//
-//        binding.priorityCircle.background.setTint(priorityColor)
    }
 }

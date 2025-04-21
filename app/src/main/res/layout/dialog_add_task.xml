@@ -14,7 +14,7 @@
         android:inputType="text"
         android:layout_marginBottom="16dp" />
 
-    <!-- Prioridad
+    <!-- Prioridad -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
-    -->
+
     <!-- Botones de acción
     <LinearLayout
         android:layout_width="match_parent"
