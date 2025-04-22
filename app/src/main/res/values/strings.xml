@@ -30,12 +30,15 @@
     <string name="correct_pin">Correct PIN</string>
     <string name="incorrect_pin">Incorrect PIN</string>
     <string name="pin_">_ _ _ _ _ _</string>
-    <string name="pin_dialog">Please enter the 6-digit PIN to access private notes.</string>
-    <string name="pin_setup_dialog">Please enter a 6-digit PIN to protect your private notes.</string>
+    <string name="pin_dialog">Please, enter the 6-digit PIN to access private notes.</string>
+    <string name="pin_setup_dialog">Please, enter a 6-digit PIN to protect your private notes.</string>
 
 
     <string name="label_note">Note</string>
     <string name="label_content">Content</string>
     <string name="label_make_private">Make note private</string>
+
+    El PIN debe tener exactamente 6 dígitos
+    PIN guardado correctamente
 
 </resources>

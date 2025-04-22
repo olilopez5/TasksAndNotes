@@ -3,29 +3,23 @@ package com.example.tasksandnotes.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tasksandnotes.R
 import com.example.tasksandnotes.adapters.MainViewPagerAdapter
-import com.example.tasksandnotes.adapters.NoteAdapter
-import com.example.tasksandnotes.adapters.TaskAdapter
-import com.example.tasksandnotes.data.Note
 import com.example.tasksandnotes.data.NoteDAO
-import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.ActivityMainBinding
 import com.example.tasksandnotes.fragments.TasksFragment
-import com.example.tasksandnotes.utils.PinManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +37,16 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setSupportActionBar(binding.toolbar)
+//
+        setSupportActionBar(binding.toolbar)
+
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("EEE dd MMM, H:mm", Locale.getDefault())
+        val currentDate = dateFormat.format(calendar.time)
+
+        supportActionBar?.title = currentDate
+        binding.toolbar.title = "Tasks and Notes – $currentDate".replaceFirstChar { it.uppercase() }
+
 
         taskDAO = TaskDAO(this)
         noteDAO = NoteDAO(this)

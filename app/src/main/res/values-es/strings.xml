@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <resources>
         <string name="app_name">TasksAndNotes</string>
         <string name="title_activity_main">TasksAndNotes</string>
         <string name="tab_text_1">Tab 1</string>
@@ -36,6 +35,4 @@
         <string name="label_note">Nota</string>
         <string name="label_content">Contenido</string>
         <string name="label_make_private">Hacer nota privada</string>
-    </resources>
-
 </resources>

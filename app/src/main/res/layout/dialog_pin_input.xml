@@ -3,6 +3,7 @@
     android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:gravity="center">
 
     <TextView
@@ -12,7 +13,6 @@
         android:text="@string/pin_setup_dialog"
         android:textSize="16sp"
         android:paddingBottom="16dp"/>
-
 
     <EditText
         android:id="@+id/pinEditText"

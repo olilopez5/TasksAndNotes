@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".fragments.NotesFragment">
 
     <LinearLayout
@@ -63,6 +62,7 @@
             </LinearLayout>
 
 
+        <!-- MaterialButtonToggleGroup
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
             android:layout_width="wrap_content"
@@ -78,24 +78,33 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 app:icon="@drawable/ic_unlock"
                 app:iconGravity="textEnd"
                 app:iconSize="30dp"
                 app:iconTint="@color/purple_500" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonPrivate"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/ic_lock_button"
-                app:iconGravity="textEnd"
-                app:iconSize="30dp"
-                app:iconTint="@color/purple_500" />
 
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+                   <com.google.android.material.button.MaterialButton
+                       android:id="@+id/buttonPrivate"
+                       style="?attr/materialButtonOutlinedStyle"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       app:icon="@drawable/ic_lock_button"
+                       app:iconGravity="textEnd"
+                       app:iconSize="30dp"
+                       app:iconTint="@color/purple_500" />
 
+               </com.google.android.material.button.MaterialButtonToggleGroup
+       -->
+           </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center"
+        android:layout_marginBottom="16dp"
+    app:srcCompat="@drawable/ic_unlock" />
 
-    </LinearLayout>
-</FrameLayout>
+       </FrameLayout>
 

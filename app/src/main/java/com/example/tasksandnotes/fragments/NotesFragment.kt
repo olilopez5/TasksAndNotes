@@ -40,27 +40,47 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             startActivity(Intent(requireContext(), PinSetupActivity::class.java))
             return binding.root
         }
-        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
 
-            when (checkedId) {
-                R.id.buttonPublic -> {
-                    loadPublicNotes()
-                }
-                R.id.buttonPrivate -> {
-                    val storedPin = PinManager.getStoredPin(requireContext())
-                    if (storedPin.isNullOrEmpty()) {
-                        Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
-                        binding.toggleButton.check(R.id.buttonPublic)
-                    } else {
-                        val dialog = PinDialog(requireContext(), storedPin) {
-                            showPrivateNotes()
-                        }
-                        dialog.show()
+        binding.fab.setOnClickListener {
+            if (isPrivateNotesVisible) {
+                loadPublicNotes()  // Mostrar notas públicas
+                binding.fab.setImageResource(R.drawable.ic_unlock)  // Cambiar icono a candado abierto
+            } else {
+                val storedPin = PinManager.getStoredPin(requireContext())
+                if (storedPin.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
+                } else {
+                    val dialog = PinDialog(requireContext(), storedPin) {
+                        showPrivateNotes()  // Mostrar notas privadas
+                        binding.fab.setImageResource(R.drawable.ic_lock_button)  // Cambiar icono a candado cerrado
                     }
+                    dialog.show()
                 }
             }
         }
+
+//
+//        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+//            if (!isChecked) return@addOnButtonCheckedListener
+//
+//            when (checkedId) {
+//                R.id.buttonPublic -> {
+//                    loadPublicNotes()
+//                }
+//                R.id.buttonPrivate -> {
+//                    val storedPin = PinManager.getStoredPin(requireContext())
+//                    if (storedPin.isNullOrEmpty()) {
+//                        Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
+//                        binding.toggleButton.check(R.id.buttonPublic)
+//                    } else {
+//                        val dialog = PinDialog(requireContext(), storedPin) {
+//                            showPrivateNotes()
+//                        }
+//                        dialog.show()
+//                    }
+//                }
+//            }
+//        }
 
 
         noteDAO = NoteDAO(requireContext())
