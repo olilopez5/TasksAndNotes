@@ -24,7 +24,6 @@ object PinManager {
         return !getStoredPin(context).isNullOrEmpty()
     }
 
-
     fun checkPin(context: Context, enteredPin: String): Boolean {
         return getStoredPin(context)?.trim() == enteredPin.trim()
     }

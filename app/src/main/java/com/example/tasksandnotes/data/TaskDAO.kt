@@ -38,6 +38,7 @@ class TaskDAO(context: Context) {
         val values = ContentValues().apply {
             put(Task.COLUMN_NAME_TITLE,task.title)
             put(Task.COLUMN_NAME_DONE,task.done)
+            put(Task.COLUMN_NAME_PRIORITY,task.priority)
         }
 
         try {
@@ -130,7 +131,7 @@ class TaskDAO(context: Context) {
                 null,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
-                Task.COLUMN_NAME_DONE             // The sort order
+                "${Task.COLUMN_NAME_DONE}, ${Task.COLUMN_NAME_PRIORITY} DESC"             // The sort order
             )
 
             while (cursor.moveToNext()) {

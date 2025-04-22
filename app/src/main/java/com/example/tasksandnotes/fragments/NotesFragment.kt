@@ -19,7 +19,6 @@ import com.example.tasksandnotes.databinding.FragmentNotesBinding
 import com.example.tasksandnotes.utils.PinDialog
 import com.example.tasksandnotes.utils.PinManager
 import com.example.tasksandnotes.data.NoteDAO
-import com.example.tasksandnotes.data.TaskDAO
 
 
 class NotesFragment : Fragment(R.layout.fragment_notes) {
@@ -51,8 +50,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 R.id.buttonPrivate -> {
                     val storedPin = PinManager.getStoredPin(requireContext())
                     if (storedPin.isNullOrEmpty()) {
-                        Toast.makeText(requireContext(), "Primero configura un PIN", Toast.LENGTH_SHORT).show()
-                        // Opcional: volver a marcar el botón público si no hay PIN
+                        Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
                         binding.toggleButton.check(R.id.buttonPublic)
                     } else {
                         val dialog = PinDialog(requireContext(), storedPin) {
@@ -79,8 +77,8 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             onDelete = { position ->
                 val note = noteList[position]
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Delete note")
-                    .setMessage("Are you sure you want to delete this note?")
+                    .setTitle(R.string.delete_note)
+                    .setMessage(R.string.delete_dialog)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         noteDAO.delete(note)
                         if (isPrivateNotesVisible) {
@@ -107,11 +105,10 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         binding.privateNotesCard.setOnClickListener {
             val storedPin = PinManager.getStoredPin(requireContext())
             if (storedPin.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Primero configura un PIN", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
             } else {
                 val dialog = PinDialog(requireContext(), storedPin) {
-                    // Si el PIN es correcto, mostrar las notas privadas
-                    Log.d("PinValidation", "PIN Correcto, mostrando notas privadas.")
+                    Log.d("NOTE_FRAGMENT", "PIN Correcto, mostrando notas privadas.")
                     showPrivateNotes()
                 }
                 dialog.show()
@@ -125,7 +122,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
     private fun loadPublicNotes() {
         // Obtener todas las notas desde la base de datos
         noteList = noteDAO.findPublicNotes()
-        Log.d("NOTES", "Notas publicas encontradas: ${noteList.size}")
+        Log.d("NOTE_FRAGMENT", "Notas publicas encontradas: ${noteList.size}")
 
         // Configurar el Adapter con las notas públicas
         noteAdapter.updateItems(noteList)
@@ -139,7 +136,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
     private fun showPrivateNotes() {
 
         noteList = noteDAO.findPrivateNotes()
-        Log.d("NOTES", "Notas privadas encontradas: ${noteList.size}")
+        Log.d("NOTE_FRAGMENT", "Notas privadas encontradas: ${noteList.size}")
 
         // Configurar el Adapter con las notas privadas
         noteAdapter.updateItems(noteList)
@@ -162,9 +159,9 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
     }
     override fun onStart() {
         super.onStart()
-        Log.d("REFRESH", "Actualizamos notas publicas")
+        Log.d("NOTE_FRAGMENT", "onStart - refreshPublicNotes- Actualizamos notas publicas")
         refreshPublicNotes()
-        Log.d("REFRESH", "Actualizamos notaas privadas")
+        Log.d("NOTE_FRAGMENT", "onStart - refreshPrivateNotes- Actualizamos notaas privadas")
         refreshPrivateNotes()
     }
 

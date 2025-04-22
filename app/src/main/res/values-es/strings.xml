@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <resources>
+        <string name="app_name">TasksAndNotes</string>
+        <string name="title_activity_main">TasksAndNotes</string>
+        <string name="tab_text_1">Tab 1</string>
+        <string name="tab_text_2">Tab 2</string>
+
+        <string name="title_tab_1">Tareas</string>
+        <string name="title_tab_2">Notas</string>
+        <string name="label_private_notes">Notas privadas</string>
+
+        <string name="add_task_dialog">Agregar tarea</string>
+        <string name="add_task_hint">Introduce el título de la tarea</string>
+        <string name="label_priority">Prioridad</string>
+        <string name="label_priority_no">Sin prioridad</string>
+        <string name="label_priority_1">Baja</string>
+        <string name="label_priority_2">Media</string>
+        <string name="label_priority_3">Alta</string>
+
+        <string name="save_button">Guardar</string>
+        <string name="submit_button">Aceptar</string>
+        <string name="cancel_button">Cancelar</string>
+
+        <string name="delete_note">Eliminar nota</string>
+        <string name="delete_dialog">¿Estás segura de que quieres eliminar esta nota?</string>
+
+        <string name="setup_pin">Primero configura un PIN</string>
+        <string name="title_pin_dialog">Introduce tu PIN</string>
+        <string name="correct_pin">PIN correcto</string>
+        <string name="incorrect_pin">PIN incorrecto</string>
+        <string name="pin_">_ _ _ _ _ _</string>
+        <string name="pin_dialog">Por favor ingresa el PIN de 6 dígitos para acceder a notas privadas.</string>
+        <string name="pin_setup_dialog">Por favor ingresa un PIN de 6 dígitos para proteger tus notas privadas.</string>
+
+        <string name="label_note">Nota</string>
+        <string name="label_content">Contenido</string>
+        <string name="label_make_private">Hacer nota privada</string>
+    </resources>
+
+</resources>

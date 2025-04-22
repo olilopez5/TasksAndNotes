@@ -58,9 +58,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             onCheck = { position ->
                 val task = taskList[position]
                 task.done = !task.done
+                if (task.done) {
+                    task.priority = 0
+                }
                 taskDAO.update(task)
                 refreshData()
-                Log.d("TASK_FRAGMENT", "Tarea check")
+                Log.d("TASK_FRAGMENT", "Tarea hecha y sin prioridad")
             },
             context = requireContext()
         )
@@ -129,6 +132,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 if (newTitle.isNotEmpty()) {
                     task.title = newTitle
                     task.priority = newPriority
+                    Log.d("TASK_FRAGMENT", "Nueva prioridad: ${task.priority}")
                     taskDAO.update(task)
                     refreshData()
                 }
@@ -139,7 +143,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     override fun onStart() {
         super.onStart()
-        Log.d("REFRESH_DATA", "Actualizamos los datos")
+        Log.d("TASK_FRAGMENT", "RefreshData - Actualizamos los datos")
         refreshData()
     }
 

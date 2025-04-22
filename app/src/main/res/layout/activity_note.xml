@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:hint="10/04/2025"
+        android:hint="22/04/2025"
         android:padding="12dp"
         android:layout_marginBottom="16dp"
         android:inputType="date"/>
@@ -23,7 +23,7 @@
         android:id="@+id/noteTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Note"
+        android:hint="@string/label_note"
         android:textSize="18sp"
         android:padding="12dp"
         android:layout_marginBottom="16dp"
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Content"
+        android:hint="@string/label_content"
         android:textSize="16sp"
         android:padding="12dp"
         android:inputType="textMultiLine"/>
@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Make note private"
+            android:text="@string/label_make_private"
             android:textSize="16sp"
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"/>
@@ -62,31 +62,12 @@
             tools:ignore="UseSwitchCompatOrMaterialXml" />
     </LinearLayout>
 
-    <!-- Campo para la contraseña (solo visible si el Switch está activado)
-    Invertigar con AlertDialog
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone">
-        <EditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Password"
-            android:textSize="16sp"
-            android:inputType="textPassword"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    -->
-
 
     <Button
         android:id="@+id/saveNoteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/save_button"
         android:textSize="16sp"
         android:layout_marginTop="16dp"/>
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tasksandnotes.databinding.DialogPinInputBinding
-import com.example.tasksandnotes.fragments.NotesFragment
 import com.example.tasksandnotes.utils.PinManager
 
 
@@ -32,13 +31,14 @@ class PinSetupActivity : AppCompatActivity() {
 //            }
 //            val encryptedPin = Security.encryptPassword(pin)
 //            PinManager.savePin(this, encryptedPin)
+
             PinManager.savePin(this, pin)
 
             Toast.makeText(this, "PIN guardado correctamente", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra("goToNotesTab", true) // si quieres indicarlo luego
+            intent.putExtra("goToNotesTab", true)
             startActivity(intent)
             finish()
 
