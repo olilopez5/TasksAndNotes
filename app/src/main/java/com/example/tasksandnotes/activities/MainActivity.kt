@@ -149,18 +149,6 @@ class MainActivity : AppCompatActivity() {
         updateTaskBadge(toDoTasksNumber)
     }
 
-
-
-
-//    val toDoTasksNumber = taskDAO.countByNotDone()
-//    val tasksTab = binding.tabs.getTabAt(0)!!
-//    if (toDoTasksNumber > 0) {
-//        val badge = tasksTab.getOrCreateBadge()
-//        badge.number = toDoTasksNumber
-//    } else {
-//        tasksTab.removeBadge()
-//    }
-
 }
 
 

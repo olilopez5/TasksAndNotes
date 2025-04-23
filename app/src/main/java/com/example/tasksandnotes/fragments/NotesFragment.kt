@@ -59,30 +59,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             }
         }
 
-//
-//        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
-//            if (!isChecked) return@addOnButtonCheckedListener
-//
-//            when (checkedId) {
-//                R.id.buttonPublic -> {
-//                    loadPublicNotes()
-//                }
-//                R.id.buttonPrivate -> {
-//                    val storedPin = PinManager.getStoredPin(requireContext())
-//                    if (storedPin.isNullOrEmpty()) {
-//                        Toast.makeText(requireContext(), R.string.setup_pin, Toast.LENGTH_SHORT).show()
-//                        binding.toggleButton.check(R.id.buttonPublic)
-//                    } else {
-//                        val dialog = PinDialog(requireContext(), storedPin) {
-//                            showPrivateNotes()
-//                        }
-//                        dialog.show()
-//                    }
-//                }
-//            }
-//        }
-
-
         noteDAO = NoteDAO(requireContext())
 
         // Configurar el Adapter con las notas privadas
@@ -99,7 +75,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.delete_note)
                     .setMessage(R.string.delete_dialog)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                    .setPositiveButton(R.string.accept_button) { _, _ ->
                         noteDAO.delete(note)
                         if (isPrivateNotesVisible) {
                             showPrivateNotes() // Recargar las notas privadas después de eliminar

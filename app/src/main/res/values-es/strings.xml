@@ -10,7 +10,7 @@
         <string name="label_private_notes">Notas privadas</string>
 
         <string name="add_task_dialog">Agregar tarea</string>
-        <string name="add_task_hint">Introduce el título de la tarea</string>
+        <string name="add_task_hint">¿Qué tienes que hacer hoy?</string>
         <string name="label_priority">Prioridad</string>
         <string name="label_priority_no">Sin prioridad</string>
         <string name="label_priority_1">Baja</string>
@@ -20,6 +20,9 @@
         <string name="save_button">Guardar</string>
         <string name="submit_button">Aceptar</string>
         <string name="cancel_button">Cancelar</string>
+        <string name="accept_button">Aceptar</string>
+
+        <string name="edit_task">Editar Tarea</string>
 
         <string name="delete_note">Eliminar nota</string>
         <string name="delete_dialog">¿Estás segura de que quieres eliminar esta nota?</string>

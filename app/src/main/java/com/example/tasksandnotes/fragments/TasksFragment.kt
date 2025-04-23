@@ -17,6 +17,8 @@ import com.example.tasksandnotes.adapters.TaskAdapter
 import com.example.tasksandnotes.data.Task
 import com.example.tasksandnotes.data.TaskDAO
 import com.example.tasksandnotes.databinding.FragmentTasksBinding
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
@@ -45,14 +47,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             onDelete = { position ->
                 val task = taskList[position]
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Delete task")
-                    .setMessage("Are you sure you want to delete this task?")
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                    .setTitle(R.string.delete_note)
+                    .setMessage(R.string.delete_dialog)
+                    .setPositiveButton(R.string.accept_button) { _, _ ->
                         taskDAO.delete(task)
                         refreshData()
                         Log.d("TASK_FRAGMENT", "Tarea borrada: quedan ${taskList.size} notas")
                     }
-                    .setNegativeButton(android.R.string.cancel, null)
+                    .setNegativeButton(R.string.cancel_button, null)
                     .show()
             },
             onCheck = { position ->
@@ -77,7 +79,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     fun showAddTaskDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextTaskTitle)
+        val editText = dialogView.findViewById<TextInputLayout>(R.id.textField)
         val spinner = dialogView.findViewById<Spinner>(R.id.spinnerPriority)
 
         ArrayAdapter.createFromResource(
@@ -90,10 +92,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Add Task")
+            .setTitle(R.string.add_task_dialog)
             .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                val title = editText.text.toString().trim()
+            .setPositiveButton(R.string.save_button) { _, _ ->
+                val title = editText.editText?.text.toString().trim()
                 val priority = spinner.selectedItemPosition
                 if (title.isNotEmpty()) {
                     val task = Task(id = -1L, title = title, priority = priority)
@@ -101,16 +103,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                     refreshData()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel_button, null)
             .show()
     }
 
     private fun showEditTaskDialog(task: Task) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextTaskTitle)
+        val editText = dialogView.findViewById<TextInputLayout>(R.id.textField)
         val spinner = dialogView.findViewById<Spinner>(R.id.spinnerPriority)
 
-        editText.setText(task.title)
+        editText.editText?.setText(task.title)
 
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -124,10 +126,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         spinner.setSelection(task.priority)
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Edit Task")
+            .setTitle(R.string.edit_task)
             .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                val newTitle = editText.text.toString().trim()
+            .setPositiveButton(R.string.save_button) { _, _ ->
+                val newTitle = editText.editText?.text.toString().trim()
                 val newPriority = spinner.selectedItemPosition
                 if (newTitle.isNotEmpty()) {
                     task.title = newTitle
@@ -137,7 +139,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                     refreshData()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel_button, null)
             .show()
     }
 

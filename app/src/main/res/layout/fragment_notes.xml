@@ -45,7 +45,15 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:layout_marginEnd="20dp"
                             android:src="@drawable/ic_lock" />
+                        <ImageView
+                            android:id="@+id/settings_pin"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="12dp"
+                            android:src="@drawable/ic_settings" />
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

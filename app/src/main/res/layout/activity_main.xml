@@ -17,9 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?actionBarSize"
-            app:title="@string/app_name"/>
-
-
+            app:title="@string/app_name"
+           app:titleTextColor="#48444D"/>
 
         <!-- TabLayout con TabItems -->
         <com.google.android.material.tabs.TabLayout
@@ -52,8 +51,6 @@
         android:layout_marginTop="8dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
-
-
     <!-- Floating Action Button para agregar elementos -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNewItem"
@@ -63,8 +60,6 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/ic_add" />
-
-
 
     <!-- Floating Action Button para ver calendario -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -76,7 +71,4 @@
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/ic_calendar_tab" />
 
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
